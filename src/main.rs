@@ -21,6 +21,18 @@ fn main() {
                 process::exit(1);
             }
         },
+        "search" => {
+            let matches = contact::search(rest_args, &contents);
+            let custom_lb = contact::lb(contact::vec_max_length(&matches));
+            println!("{}", custom_lb);
+            for result in matches {
+                println!(
+                    "{}\n{}", 
+                    result, 
+                    custom_lb
+                );
+            }
+        },
         _ => eprintln!("Invalid command")
     };
 }
