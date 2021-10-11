@@ -21,6 +21,17 @@ fn main() {
                 process::exit(1);
             }
         },
+        "search" => {
+            let lb = "--------------------";
+            println!("{}", lb);
+            for result in contact::search(rest_args, &contents) {
+                println!(
+                    "{}\n{}", 
+                    result, 
+                    lb
+                );
+            }
+        },
         _ => eprintln!("Invalid command")
     };
 }

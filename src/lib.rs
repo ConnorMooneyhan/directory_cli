@@ -1,8 +1,8 @@
-use std::{ fmt, fs, io };
+use std::{ fmt, fs, io, process };
 
 // Every command that accesses a contact should use this struct
 // Defines Contact struct
-struct Contact {
+pub struct Contact {
     first: String,
     last: String,
     number: String,
@@ -67,6 +67,33 @@ pub fn add(args: &[String], contents: &String) -> Result<(), io::Error> {
     Ok(())
 }
 
+// Searches directory for contact information to print
+pub fn search(args: &[String], contents: &String) -> Vec<Contact> {
+    let mut matches = Vec::new();
+    let search_term = match args.len() {
+        1 => args[0].clone(),
+        2 => format!("{} {}", args[0], args[1]),
+        _ => {
+            eprintln!("Please enter either a name or a number to search");
+            process::exit(1);
+        }
+    };
+
+    for line in contents.lines() {
+        if line.to_lowercase().contains(&search_term.to_lowercase()) {
+            let words: Vec<&str> = line.split_whitespace().collect();
+            matches.push(Contact::new(
+                words[0].to_string(),
+                words[1].to_string(),
+                words[2].to_string()
+            ));
+        }
+    }
+
+    matches
+}
+
+
 // LOCAL UTILITY FUNCTION
 // Capitalizes Strings
 fn capitalize(word: &String) -> String {
@@ -75,7 +102,5 @@ fn capitalize(word: &String) -> String {
 
 #[cfg(tests)]
 mod tests {
-    fn create_contact() {
 
-    }
 }
