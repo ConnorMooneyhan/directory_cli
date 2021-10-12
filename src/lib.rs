@@ -87,7 +87,7 @@ pub fn search(args: &[String], contents: &String) -> Vec<Contact> {
         1 => args[0].clone(),
         2 => format!("{} {}", args[0], args[1]),
         _ => {
-            eprintln!("Please enter either a name or a number to search");
+            eprintln!("Please enter either a name or a number to search.");
             process::exit(1);
         }
     };
