@@ -75,7 +75,7 @@ pub fn add(args: &[String], contents: &String) -> Result<(), io::Error> {
 }
 
 // Searches directory for contact information to print
-pub fn search(args: &[String], contents: &String) -> Vec<Contact> {
+pub fn search(args: &[String], contents: &String) {
     let mut matches = Vec::new();
     let search_term = match args.len() {
         1 => args[0].clone(),
@@ -97,7 +97,15 @@ pub fn search(args: &[String], contents: &String) -> Vec<Contact> {
         }
     }
 
-    matches
+    let custom_lb = lb(vec_max_length(&matches));
+    println!("{}", custom_lb);
+    for result in matches {
+        println!(
+            "{}\n{}", 
+            result, 
+            custom_lb
+        );
+    }
 }
 
 
@@ -109,7 +117,7 @@ fn capitalize(word: &String) -> String {
 
 // UTILITY FUNCTION
 // Returns line break of size n
-pub fn lb(n: usize) -> String {
+fn lb(n: usize) -> String {
     let mut line_break = String::new();
     for _i in 0..n {
         line_break = format!("{}-", line_break);
@@ -119,7 +127,7 @@ pub fn lb(n: usize) -> String {
 
 // UTILITY FUNCTION
 // Calculates largest display_length of Contacts in a vector
-pub fn vec_max_length(list: &Vec<Contact>) -> usize {
+fn vec_max_length(list: &Vec<Contact>) -> usize {
     let mut max = 0;
     for contact in list {
         if contact.display_length > max {
