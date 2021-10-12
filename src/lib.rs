@@ -103,19 +103,22 @@ pub fn search(args: &[String], contents: &String) {
         }
     }
 
-    let custom_lb = lb(vec_max_length(&matches));
-    println!("{}", custom_lb);
-    for result in matches {
-        println!(
-            "{}\n{}", 
-            result, 
-            custom_lb
-        );
+    if matches.len() != 0 {
+        let custom_lb = lb(vec_max_length(&matches));
+        println!("{}", custom_lb);
+        for result in matches {
+            println!(
+                "{}\n{}", 
+                result, 
+                custom_lb
+            );
+        }
+    } else {
+        println!("No matches found.");
     }
 }
 
-
-// LOCAL UTILITY FUNCTION
+// UTILITY FUNCTION
 // Capitalizes Strings
 fn capitalize(word: &String) -> String {
     format!("{}{}", word[..1].to_uppercase(), word[1..].to_lowercase())
