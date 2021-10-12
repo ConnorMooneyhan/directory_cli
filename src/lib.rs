@@ -81,7 +81,7 @@ pub fn add(args: &[String], contents: &String) {
 }
 
 // Searches directory for contact information to print
-pub fn search(args: &[String], contents: &String) {
+pub fn search(args: &[String], contents: &String) -> Vec<Contact> {
     let mut matches = Vec::new();
     let search_term = match args.len() {
         1 => args[0].clone(),
@@ -103,6 +103,10 @@ pub fn search(args: &[String], contents: &String) {
         }
     }
 
+    matches
+}
+
+pub fn display_search_results(matches: Vec<Contact>) {
     if matches.len() != 0 {
         let custom_lb = lb(vec_max_length(&matches));
         println!("{}", custom_lb);

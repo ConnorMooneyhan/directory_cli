@@ -15,7 +15,7 @@ fn main() {
     // Selects command function to run based on 'command'
     match command {
         "add" => contact::add(rest_args, &contents),
-        "search" => contact::search(rest_args, &contents),
+        "search" => contact::display_search_results(contact::search(rest_args, &contents)),
         _ => eprintln!("Invalid command")
     };
 }
