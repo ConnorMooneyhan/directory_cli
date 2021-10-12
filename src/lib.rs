@@ -47,7 +47,7 @@ impl fmt::Display for Contact {
 }
 
 // Adds new contact to directory
-pub fn add(args: &[String], contents: &String) -> Result<(), io::Error> {
+pub fn add(args: &[String], contents: &String) {
     
     // PLACEHOLDER FOR VALIDATION LOGIC
     //
@@ -59,7 +59,7 @@ pub fn add(args: &[String], contents: &String) -> Result<(), io::Error> {
         args[2].clone()
     );
     
-    fs::write("directory.txt", format!(
+    let result = fs::write("directory.txt", format!(
         "{}{}{} {} {}",
         contents, 
         match contents.as_str() {
@@ -69,9 +69,15 @@ pub fn add(args: &[String], contents: &String) -> Result<(), io::Error> {
         new_contact.first,
         new_contact.last,
         new_contact.number
-    ))?;
+    ));
 
-    Ok(())
+    match result {
+        Ok(_) => (),
+        Err(_) => {
+            eprintln!("Unable to add contact :(");
+            process::exit(1);
+        }
+    }
 }
 
 // Searches directory for contact information to print

@@ -14,13 +14,7 @@ fn main() {
 
     // Selects command function to run based on user input
     match command {
-        "add" => match contact::add(rest_args, &contents) {
-            Ok(_) => (),
-            Err(_) => {
-                eprintln!("Unable to add contact :(");
-                process::exit(1);
-            }
-        },
+        "add" => contact::add(rest_args, &contents),
         "search" => contact::search(rest_args, &contents),
         _ => eprintln!("Invalid command")
     };
