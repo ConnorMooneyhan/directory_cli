@@ -59,7 +59,7 @@ pub fn add(args: &[String], contents: &String) {
         args[2].clone()
     );
     
-    let result = fs::write("directory.txt", format!(
+    let write_result = fs::write("directory.txt", format!(
         "{}{}{} {} {}",
         contents, 
         match contents.as_str() {
@@ -71,7 +71,7 @@ pub fn add(args: &[String], contents: &String) {
         new_contact.number
     ));
 
-    match result {
+    match write_result {
         Ok(_) => (),
         Err(_) => {
             eprintln!("Unable to add contact :(");
@@ -121,6 +121,22 @@ pub fn display_search_results(matches: Vec<Contact>) {
         println!("No matches found.");
     }
 }
+
+// pub fn delete(matches: Vec<Contact>) {
+//     if matches.len() == 1 {
+//         let write_result = fs::write("directory.txt", format!(
+//             "{}{}{} {} {}",
+//             contents, 
+//             match contents.as_str() {
+//                 "" => "",
+//                 _ => "\n"
+//             },
+//             new_contact.first,
+//             new_contact.last,
+//             new_contact.number
+//         ));
+//     }
+// }
 
 // UTILITY FUNCTION
 // Capitalizes Strings
