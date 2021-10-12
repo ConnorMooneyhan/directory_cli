@@ -1,4 +1,4 @@
-use std::{ fmt, fs, io, process, cmp };
+use std::{ fmt, fs, process, cmp };
 
 // Every command that accesses a contact should use this struct
 // Defines Contact struct

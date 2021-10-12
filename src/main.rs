@@ -1,4 +1,4 @@
-use std::{env, fs, process};
+use std::{ env, fs };
 
 fn main() {
     // Collects arguments
