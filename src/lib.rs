@@ -34,9 +34,11 @@ impl fmt::Display for Contact {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f, 
-            "Name: {} {}\nNumber: ({}) {}-{}",
+            "Name: {}{} {}\nNumber: {}({}) {}-{}",
+            spaces(self.display_length - ("Name:  ".len() + self.first.len() + self.last.len())),
             &self.first,
             &self.last,
+            spaces(self.display_length - ("Number: () -".len() + 10)),
             &self.number[..3],
             &self.number[3..6],
             &self.number[6..]
@@ -116,6 +118,7 @@ pub fn lb(n: usize) -> String {
 }
 
 // UTILITY FUNCTION
+// Calculates largest display_length of Contacts in a vector
 pub fn vec_max_length(list: &Vec<Contact>) -> usize {
     let mut max = 0;
     for contact in list {
@@ -124,6 +127,16 @@ pub fn vec_max_length(list: &Vec<Contact>) -> usize {
         }
     }
     max
+}
+
+// UTILITY FUNCTION
+// Generates n spaces
+fn spaces(n: usize) -> String {
+    let mut result = String::new();
+    for _i in 0..n {
+        result = format!("{} ", result);
+    }
+    result
 }
 
 #[cfg(tests)]
