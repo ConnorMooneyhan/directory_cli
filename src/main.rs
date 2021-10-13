@@ -1,8 +1,14 @@
-use std::{ env, fs };
+use std::{ env, fs, process };
 
 fn main() {
     // Collects arguments
     let args: Vec<String> = env::args().collect();
+
+    if args.len() == 1 {
+        contact::print_docs();
+        process::exit(1);
+    }
+
     let command = args[1].as_str();
     let rest_args = &args[2..];
     let mut directory_path = env::current_exe().expect("Couldn't find directory.txt path.");
@@ -20,6 +26,10 @@ fn main() {
         "add" => contact::add(rest_args, &contents, &directory_path),
         "search" | "view" => contact::display_search_results(contact::search(rest_args, &contents)),
         //"delete" => contact::delete(contact::search(rest_args, &contents)),
-        _ => eprintln!("Invalid command")
+        "help" => contact::print_docs(),
+        _ => {
+            println!("Invalid command.");
+            contact::print_docs();
+        }
     };
 }

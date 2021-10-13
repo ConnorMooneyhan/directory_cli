@@ -138,6 +138,16 @@ pub fn display_search_results(matches: Vec<Contact>) {
 //     }
 // }
 
+pub fn print_docs() {
+    println!("\n----------------------------------------------------------------");
+    println!("DOCUMENTATION\n");
+    println!("Available commands:");
+    println!("contact ______");
+    println!("\tsearch [name/number (can be partial)]");
+    println!("\tadd [first name] [last name] [phone number w/ no spaces]");
+    println!("----------------------------------------------------------------\n");
+}
+
 // UTILITY FUNCTION
 // Capitalizes Strings
 fn capitalize(word: &String) -> String {
