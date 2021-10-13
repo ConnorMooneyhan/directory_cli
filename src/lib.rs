@@ -1,4 +1,4 @@
-use std::{ fmt, fs, process, cmp };
+use std::{ fmt, fs, process, cmp, path };
 
 // Every command that accesses a contact should use this struct
 // Defines Contact struct
@@ -47,7 +47,7 @@ impl fmt::Display for Contact {
 }
 
 // Adds new contact to directory
-pub fn add(args: &[String], contents: &String) {
+pub fn add(args: &[String], contents: &String, path: &path::PathBuf) {
     
     // PLACEHOLDER FOR VALIDATION LOGIC
     //
@@ -59,7 +59,7 @@ pub fn add(args: &[String], contents: &String) {
         args[2].clone()
     );
     
-    let write_result = fs::write("directory.txt", format!(
+    let write_result = fs::write(path, format!(
         "{}{}{} {} {}",
         contents, 
         match contents.as_str() {
