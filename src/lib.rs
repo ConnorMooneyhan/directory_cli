@@ -49,10 +49,6 @@ impl fmt::Display for Contact {
 // Adds new contact to directory
 pub fn add(args: &[String], contents: &String, path: &path::PathBuf) {
     
-    // PLACEHOLDER FOR VALIDATION LOGIC
-    //
-    //
-    
     let new_contact = Contact::new(
         args[0].clone(),
         args[1].clone(),
@@ -125,22 +121,6 @@ pub fn display_contacts(matches: Vec<Contact>) {
     }
 }
 
-// pub fn delete(matches: Vec<Contact>) {
-//     if matches.len() == 1 {
-//         let write_result = fs::write("directory.txt", format!(
-//             "{}{}{} {} {}",
-//             contents, 
-//             match contents.as_str() {
-//                 "" => "",
-//                 _ => "\n"
-//             },
-//             new_contact.first,
-//             new_contact.last,
-//             new_contact.number
-//         ));
-//     }
-// }
-
 pub fn print_docs() {
     println!("\n----------------------------------------------------------------");
     println!("DOCUMENTATION\n");
@@ -154,6 +134,9 @@ pub fn print_docs() {
 // UTILITY FUNCTION
 // Capitalizes Strings
 fn capitalize(word: &String) -> String {
+    if word.len() == 1 {
+        return word.to_uppercase();
+    }
     format!("{}{}", word[..1].to_uppercase(), word[1..].to_lowercase())
 }
 
@@ -189,7 +172,34 @@ fn spaces(n: usize) -> String {
     result
 }
 
-#[cfg(tests)]
+#[cfg(test)]
 mod tests {
+    use super::*;
 
+    #[test]
+    fn generates_spaces() {
+        assert_eq!(spaces(5), "     ".to_string());        
+        assert_eq!(spaces(2), "  ".to_string());        
+        assert_eq!(spaces(17), "                 ".to_string());        
+        assert_eq!(spaces(7), "       ".to_string());        
+        assert_eq!(spaces(12), "            ".to_string());        
+    }
+
+    #[test]
+    fn generates_lb() {
+        assert_eq!(lb(5), "-----".to_string());        
+        assert_eq!(lb(2), "--".to_string());        
+        assert_eq!(lb(17), "-----------------".to_string());        
+        assert_eq!(lb(7), "-------".to_string());        
+        assert_eq!(lb(12), "------------".to_string());        
+    }
+
+    #[test]
+    fn capitalizes() {
+        assert_eq!(capitalize(&"peacock".to_string()), "Peacock".to_string());
+        assert_eq!(capitalize(&"peAcoCK".to_string()), "Peacock".to_string());
+        assert_eq!(capitalize(&"PEACOCK".to_string()), "Peacock".to_string());
+        assert_eq!(capitalize(&"p".to_string()), "P".to_string());
+        assert_eq!(capitalize(&"alfred peacock".to_string()), "Alfred peacock".to_string());
+    }
 }
