@@ -101,7 +101,15 @@ pub fn add(args: &[String], contents: &String, path: &path::PathBuf) {
         }
     }
 
-    println!("\nAdded\n  |\n  |\n  V");
+    let spacing = spaces(new_contact.display_length / 2 - match new_contact.display_length % 2 {1 => 2, 0 => 3, _ => 0});
+
+    println!(
+        "\n{}Added\n  {}|\n  {}|\n  {}V",
+        spacing,
+        spacing,
+        spacing,
+        spacing
+        );
     display_contacts(vec![new_contact]);
 }
 
