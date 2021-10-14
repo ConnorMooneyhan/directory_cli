@@ -75,7 +75,7 @@ pub fn add(args: &[String], contents: &String, path: &path::PathBuf) {
         }
     }
 
-    println!("\nAdded:");
+    println!("\nAdded\n  |\n  |\n  V");
     display_contacts(vec![new_contact]);
 }
 
