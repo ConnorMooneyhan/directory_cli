@@ -214,11 +214,11 @@ mod tests {
 
     #[test]
     fn generates_lb() {
-        assert_eq!(lb(5), "-----".to_string());        
-        assert_eq!(lb(2), "--".to_string());        
-        assert_eq!(lb(17), "-----------------".to_string());        
-        assert_eq!(lb(7), "-------".to_string());        
-        assert_eq!(lb(12), "------------".to_string());        
+        assert_eq!(lb(&5), "-----".to_string());        
+        assert_eq!(lb(&2), "--".to_string());        
+        assert_eq!(lb(&17), "-----------------".to_string());        
+        assert_eq!(lb(&7), "-------".to_string());        
+        assert_eq!(lb(&12), "------------".to_string());        
     }
 
     #[test]
