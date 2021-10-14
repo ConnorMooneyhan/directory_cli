@@ -78,6 +78,9 @@ pub fn add(args: &[String], contents: &String, path: &path::PathBuf) {
             process::exit(1);
         }
     }
+
+    println!("\nAdded:");
+    display_contacts(vec![new_contact]);
 }
 
 // Searches directory for contact information to print
@@ -106,7 +109,7 @@ pub fn search(args: &[String], contents: &String) -> Vec<Contact> {
     matches
 }
 
-pub fn display_search_results(matches: Vec<Contact>) {
+pub fn display_contacts(matches: Vec<Contact>) {
     if matches.len() != 0 {
         let custom_lb = lb(vec_max_length(&matches));
         println!("{}", custom_lb);

@@ -24,7 +24,7 @@ fn main() {
     // Selects command function to run based on 'command'
     match command {
         "add" => contact::add(rest_args, &contents, &directory_path),
-        "search" | "view" => contact::display_search_results(contact::search(rest_args, &contents)),
+        "search" | "view" => contact::display_contacts(contact::search(rest_args, &contents)),
         //"delete" => contact::delete(contact::search(rest_args, &contents)),
         "help" => contact::print_docs(),
         _ => {
