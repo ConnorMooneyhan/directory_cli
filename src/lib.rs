@@ -27,6 +27,20 @@ impl Contact {
             )
         }
     }
+
+    // Displays contact dynamically, based on other contact lengths
+    pub fn display(&self, length: &usize) -> String {
+        format!(
+            "Name: {}{} {}\nNumber: {}({}) {}-{}",
+            spaces(length - ("Name:  ".len() + self.first.len() + self.last.len())),
+            &self.first,
+            &self.last,
+            spaces(length - ("Number: () -".len() + 10)),
+            &self.number[..3],
+            &self.number[3..6],
+            &self.number[6..]
+        )
+    }
 }
 
 // Implements Display for use in viewing contact
@@ -119,12 +133,13 @@ pub fn search(args: &[String], contents: &String) -> Vec<Contact> {
 
 pub fn display_contacts(matches: Vec<Contact>) {
     if matches.len() != 0 {
-        let custom_lb = lb(vec_max_length(&matches));
+        let length = vec_max_length(&matches);
+        let custom_lb = lb(&length);
         println!("{}", custom_lb);
-        for result in matches {
+        for contact in matches {
             println!(
                 "{}\n{}", 
-                result, 
+                contact.display(&length), 
                 custom_lb
             );
         }
@@ -154,9 +169,9 @@ fn capitalize(word: &String) -> String {
 
 // UTILITY FUNCTION
 // Returns line break of size n
-fn lb(n: usize) -> String {
+fn lb(n: &usize) -> String {
     let mut line_break = String::new();
-    for _i in 0..n {
+    for _i in 0..*n {
         line_break = format!("{}-", line_break);
     }
     line_break

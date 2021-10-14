@@ -28,7 +28,7 @@ fn main() {
         //"delete" => contact::delete(contact::search(rest_args, &contents)),
         "help" => contact::print_docs(),
         _ => {
-            println!("Invalid command.");
+            println!("'{}' is not a valid command.", command);
             contact::print_docs();
         }
     };
