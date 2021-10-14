@@ -49,11 +49,23 @@ impl fmt::Display for Contact {
 // Adds new contact to directory
 pub fn add(args: &[String], contents: &String, path: &path::PathBuf) {
     
-    let new_contact = Contact::new(
-        args[0].clone(),
-        args[1].clone(),
-        args[2].clone()
-    );
+    let new_contact =  match args.len() {
+        3 => Contact::new(
+            args[0].clone(),
+            args[1].clone(),
+            args[2].clone()
+        ),
+        2 => Contact::new(
+            args[0].clone(),
+            "UNKNOWN".to_string(),
+            args[1].clone()
+        ),
+        _ => Contact::new(
+            String::new(), 
+            String::new(), 
+            String::new()
+        )
+    };
     
     let write_result = fs::write(path, format!(
         "{}{}{} {} {}",
