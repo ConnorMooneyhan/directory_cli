@@ -208,12 +208,14 @@ pub fn display_contacts(contacts_vec: &Vec<Contact>) {
 }
 
 pub fn print_docs() {
+    let indentation = spaces("contact ".len());
     println!("\n----------------------------------------------------------------");
     println!("DOCUMENTATION\n");
     println!("Available commands:");
     println!("contact ______");
-    println!("\tsearch [name/number (can be partial)]");
-    println!("\tadd [first name] [last name] [phone number w/ no spaces]");
+    println!("{}search [name/number (can be partial)]", indentation);
+    println!("{}add [first name] [last name] [phone number w/ no spaces]", indentation);
+    println!("{}delete [name]", indentation);
     println!("----------------------------------------------------------------\n");
 }
 
