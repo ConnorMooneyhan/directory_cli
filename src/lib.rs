@@ -1,7 +1,10 @@
-use std::{ fmt, fs, process, cmp, path };
+use std::{ fmt, fs, process, cmp, path, collections::HashMap };
+use serde::{ Serialize, Deserialize };
+use serde_json;
 
 // Every command that accesses a contact should use this struct
 // Defines Contact struct
+#[derive(Serialize, Deserialize)]
 pub struct Contact {
     first: String,
     last: String,
@@ -61,8 +64,9 @@ impl fmt::Display for Contact {
 }
 
 // Adds new contact to directory
-pub fn add(args: &[String], contents: &String, path: &path::PathBuf) {
+pub fn add(args: &[String], contacts: &mut HashMap<String, Contact>, path: &path::PathBuf) {
     
+    // Creates new contact
     let new_contact =  match args.len() {
         3 => Contact::new(
             args[0].clone(),
@@ -80,19 +84,25 @@ pub fn add(args: &[String], contents: &String, path: &path::PathBuf) {
             String::new()
         )
     };
-    
-    let write_result = fs::write(path, format!(
-        "{}{}{} {} {}",
-        contents, 
-        match contents.as_str() {
-            "" => "",
-            _ => "\n"
-        },
-        new_contact.first,
-        new_contact.last,
-        new_contact.number
-    ));
 
+    // Stores associated values to be used after new_contact is moved
+    let new_length = new_contact.display_length;
+    let new_first = new_contact.first.clone();
+    let new_last = new_contact.last.clone();
+    let new_number = new_contact.number.clone();
+
+    // Adds contact to contacts
+    contacts.insert(
+        format!("{} {}", new_first, new_last),
+        new_contact
+    );
+
+    // Writes updated contacts to directory.json
+    let write_result = fs::write(
+        path,
+        serde_json::to_string_pretty(&contacts).unwrap()
+    );
+    
     match write_result {
         Ok(_) => (),
         Err(_) => {
@@ -101,7 +111,7 @@ pub fn add(args: &[String], contents: &String, path: &path::PathBuf) {
         }
     }
 
-    let spacing = spaces(new_contact.display_length / 2 - match new_contact.display_length % 2 {1 => 2, 0 => 3, _ => 0});
+    let spacing = spaces(new_length / 2 - match new_length % 2 {1 => 2, 0 => 3, _ => 0});
 
     println!(
         "\n{}Added\n  {}|\n  {}|\n  {}V",
@@ -110,12 +120,18 @@ pub fn add(args: &[String], contents: &String, path: &path::PathBuf) {
         spacing,
         spacing
         );
-    display_contacts(vec![new_contact]);
+    display_contacts(vec![Contact::new(
+        new_first,
+        new_last,
+        new_number
+    )]);
 }
 
 // Searches directory for contact information to print
-pub fn search(args: &[String], contents: &String) -> Vec<Contact> {
+pub fn search(args: &[String], contacts: &HashMap<String, Contact>) -> Vec<Contact> {
     let mut matches = Vec::new();
+
+    // Processes search term
     let search_term = match args.len() {
         1 => args[0].clone(),
         2 => format!("{} {}", args[0], args[1]),
@@ -125,17 +141,19 @@ pub fn search(args: &[String], contents: &String) -> Vec<Contact> {
         }
     };
 
-    for line in contents.lines() {
-        if line.to_lowercase().contains(&search_term.to_lowercase()) {
-            let words: Vec<&str> = line.split_whitespace().collect();
+    // Searches entries
+    for key in contacts.keys() {
+        if key.to_lowercase().contains(&search_term.to_lowercase()) {
+            let value = contacts.get(key).unwrap();
             matches.push(Contact::new(
-                words[0].to_string(),
-                words[1].to_string(),
-                words[2].to_string()
+                value.first.clone(),
+                value.last.clone(),
+                value.number.clone()
             ));
         }
     }
 
+    // Returns vector of matches
     matches
 }
 
