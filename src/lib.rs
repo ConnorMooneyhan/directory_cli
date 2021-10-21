@@ -1,4 +1,4 @@
-use std::{ fmt, fs, process, cmp, path, collections::HashMap };
+use std::{cmp, collections::HashMap, fmt, fs, path, process};
 use serde::{ Serialize, Deserialize };
 use serde_json;
 
@@ -65,6 +65,7 @@ impl fmt::Display for Contact {
 
 // Adds new contact to directory
 pub fn add(args: &[String], contacts: &mut HashMap<String, Contact>, path: &path::PathBuf) {
+    exit_if_empty(args);
     
     // Creates new contact
     let new_contact =  match args.len() {
@@ -125,12 +126,13 @@ pub fn add(args: &[String], contacts: &mut HashMap<String, Contact>, path: &path
         new_last,
         new_number
     )]);
-}
+}    
 
 // Searches directory for contact information to print
 pub fn search(args: &[String], contacts: &HashMap<String, Contact>) -> Vec<Contact> {
+    exit_if_empty(args);
     let mut matches = Vec::new();
-
+    
     // Processes search term
     let search_term = match args.len() {
         1 => args[0].clone(),
@@ -138,9 +140,9 @@ pub fn search(args: &[String], contacts: &HashMap<String, Contact>) -> Vec<Conta
         _ => {
             eprintln!("Please enter either a name or a number to search.");
             process::exit(1);
-        }
-    };
-
+        }    
+    };    
+    
     // Searches entries
     for key in contacts.keys() {
         if key.to_lowercase().contains(&search_term.to_lowercase()) {
@@ -149,15 +151,16 @@ pub fn search(args: &[String], contacts: &HashMap<String, Contact>) -> Vec<Conta
                 value.first.clone(),
                 value.last.clone(),
                 value.number.clone()
-            ));
-        }
-    }
-
+            ));    
+        }    
+    }    
+    
     // Returns vector of matches
     matches
-}
+}    
 
 pub fn delete(args: &[String], contacts: &mut HashMap<String, Contact>, path: &path::PathBuf) {
+    exit_if_empty(args);
     let matches = search(args, &contacts);
     // Runs cases for number of matches
     match matches.len() {
@@ -166,27 +169,35 @@ pub fn delete(args: &[String], contacts: &mut HashMap<String, Contact>, path: &p
             let write_result = fs::write(
                 path,
                 serde_json::to_string_pretty(&contacts).unwrap()
-            );
+            );    
             
             match write_result {
                 Ok(_) => (),
                 Err(_) => {
                     eprintln!("Unable to delete contact :(");
                     process::exit(1);
-                }
-            }
-
+                }    
+            }    
+            
             println!("The following contact has been deleted:");
             display_contacts(&matches);
-        },
+        },    
         0 => {
             println!("No contacts found with that name.");
-        },
+        },    
         _ => {
             println!("There are multiple contacts that match that query:\n");
             display_contacts(&matches);
             println!("\nPlease retry with the full name of the contact you wish to delete.");
-        }
+        }    
+    }    
+}    
+
+// Exits process if no args supplied
+fn exit_if_empty(args: &[String]) {
+    if args.len() == 0 {
+        println!("Oops! Remember to enter your argument(s) after the command.");
+        process::exit(1);
     }
 }
 
@@ -200,12 +211,12 @@ pub fn display_contacts(contacts_vec: &Vec<Contact>) {
                 "{}\n{}", 
                 contact.display(&length), 
                 custom_lb
-            );
-        }
+            );    
+        }    
     } else {
         println!("No matches found.");
-    }
-}
+    }    
+}    
 
 pub fn print_docs() {
     let indentation = spaces("contact ".len());
@@ -217,16 +228,16 @@ pub fn print_docs() {
     println!("{}add [first name] [last name] [phone number w/ no spaces]", indentation);
     println!("{}delete [name]", indentation);
     println!("----------------------------------------------------------------\n");
-}
+}    
 
 // UTILITY FUNCTION
 // Capitalizes Strings
 fn capitalize(word: &String) -> String {
     if word.len() == 1 {
         return word.to_uppercase();
-    }
+    }    
     format!("{}{}", word[..1].to_uppercase(), word[1..].to_lowercase())
-}
+}    
 
 // UTILITY FUNCTION
 // Returns line break of size n
@@ -234,9 +245,9 @@ fn lb(n: &usize) -> String {
     let mut line_break = String::new();
     for _i in 0..*n {
         line_break = format!("{}-", line_break);
-    }
+    }    
     line_break
-}
+}    
 
 // UTILITY FUNCTION
 // Calculates largest display_length of Contacts in a vector
@@ -245,10 +256,10 @@ fn vec_max_length(list: &Vec<Contact>) -> usize {
     for contact in list {
         if contact.display_length > max {
             max = contact.display_length;
-        }
-    }
+        }    
+    }    
     max
-}
+}    
 
 // UTILITY FUNCTION
 // Generates n spaces
@@ -256,9 +267,9 @@ fn spaces(n: usize) -> String {
     let mut result = String::new();
     for _i in 0..n {
         result = format!("{} ", result);
-    }
+    }    
     result
-}
+}    
 
 #[cfg(test)]
 mod tests {
