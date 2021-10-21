@@ -120,7 +120,7 @@ pub fn add(args: &[String], contacts: &mut HashMap<String, Contact>, path: &path
         spacing,
         spacing
         );
-    display_contacts(vec![Contact::new(
+    display_contacts(&vec![Contact::new(
         new_first,
         new_last,
         new_number
@@ -157,12 +157,45 @@ pub fn search(args: &[String], contacts: &HashMap<String, Contact>) -> Vec<Conta
     matches
 }
 
-pub fn display_contacts(matches: Vec<Contact>) {
-    if matches.len() != 0 {
-        let length = vec_max_length(&matches);
+pub fn delete(args: &[String], contacts: &mut HashMap<String, Contact>, path: &path::PathBuf) {
+    let matches = search(args, &contacts);
+    // Runs cases for number of matches
+    match matches.len() {
+        1 => {
+            contacts.remove(&format!("{} {}", matches[0].first, matches[0].last));
+            let write_result = fs::write(
+                path,
+                serde_json::to_string_pretty(&contacts).unwrap()
+            );
+            
+            match write_result {
+                Ok(_) => (),
+                Err(_) => {
+                    eprintln!("Unable to delete contact :(");
+                    process::exit(1);
+                }
+            }
+
+            println!("The following contact has been deleted:");
+            display_contacts(&matches);
+        },
+        0 => {
+            println!("No contacts found with that name.");
+        },
+        _ => {
+            println!("There are multiple contacts that match that query:\n");
+            display_contacts(&matches);
+            println!("\nPlease retry with the full name of the contact you wish to delete.");
+        }
+    }
+}
+
+pub fn display_contacts(contacts_vec: &Vec<Contact>) {
+    if contacts_vec.len() != 0 {
+        let length = vec_max_length(&contacts_vec);
         let custom_lb = lb(&length);
         println!("{}", custom_lb);
-        for contact in matches {
+        for contact in contacts_vec {
             println!(
                 "{}\n{}", 
                 contact.display(&length), 
