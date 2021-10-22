@@ -139,7 +139,7 @@ pub fn search(args: &[String], contacts: &HashMap<String, Contact>) -> Vec<Conta
         1 => args[0].clone(),
         2 => format!("{} {}", args[0], args[1]),
         _ => {
-            eprintln!("Please enter either a name or a number to search.");
+            eprintln!("Please enter a name or part of a name to search.");
             process::exit(1);
         }    
     };    
@@ -158,8 +158,38 @@ pub fn search(args: &[String], contacts: &HashMap<String, Contact>) -> Vec<Conta
     
     // Returns vector of matches
     matches
-}    
+}
 
+// Searches for matches by number
+pub fn reverse_search(args: &[String], contacts: &HashMap<String, Contact>) -> Vec<Contact> {
+    exit_if_empty(args);
+    let mut matches = Vec::new();
+    
+    // Processes search term
+    let search_term = match args.len() {
+        1 => args[0].clone(),
+        _ => {
+            eprintln!("Please enter a number or part of a number to reverse search.");
+            process::exit(1);
+        }    
+    };    
+    
+    // Searches entries
+    for contact in contacts.values() {
+        if contact.number.contains(&search_term.to_lowercase()) {
+            matches.push(Contact::new(
+                contact.first.clone(),
+                contact.last.clone(),
+                contact.number.clone()
+            ));    
+        }    
+    }    
+    
+    // Returns vector of matches
+    matches
+}
+
+// Deletes contact from directory
 pub fn delete(args: &[String], contacts: &mut HashMap<String, Contact>, path: &path::PathBuf) {
     exit_if_empty(args);
     let matches = search(args, &contacts);
@@ -192,7 +222,7 @@ pub fn delete(args: &[String], contacts: &mut HashMap<String, Contact>, path: &p
             println!("\nPlease retry with the full name of the contact you wish to delete.");
         }    
     }    
-}    
+}
 
 // Exits process if no args supplied
 fn exit_if_empty(args: &[String]) {
@@ -205,7 +235,7 @@ fn exit_if_empty(args: &[String]) {
 pub fn display_contacts(contacts_vec: &Vec<Contact>) {
     if contacts_vec.len() != 0 {
         let length = vec_max_length(&contacts_vec);
-        let custom_lb = lb(&length);
+        let custom_lb = dashes(&length);
         println!("{}", custom_lb);
         for contact in contacts_vec {
             println!(
@@ -230,6 +260,9 @@ pub fn print_docs() {
     println!("{}{} [first name] [last name] [phone number w/ no spaces]", indentation, "add");
     println!("{}{} [first name] [last name] [phone number w/ no spaces]", indentation, "edit");
     println!("{}{} [name/part of name]", indentation, "delete");
+    println!("{}{} (displays this documentation)", indentation, "help");
+    println!("\nInitials of commands are valid as shortcuts");
+    println!("e.g. 'add' => 'a' and 'reverse-search' => 'rs'");
     println!("{}\n", "----------------------------------------------------------------");
 }    
 
@@ -243,8 +276,8 @@ fn capitalize(word: &String) -> String {
 }    
 
 // UTILITY FUNCTION
-// Returns line break of size n
-fn lb(n: &usize) -> String {
+// Returns string of n dashes
+fn dashes(n: &usize) -> String {
     let mut line_break = String::new();
     for _i in 0..*n {
         line_break = format!("{}-", line_break);
@@ -289,11 +322,11 @@ mod tests {
 
     #[test]
     fn generates_lb() {
-        assert_eq!(lb(&5), "-----".to_string());        
-        assert_eq!(lb(&2), "--".to_string());        
-        assert_eq!(lb(&17), "-----------------".to_string());        
-        assert_eq!(lb(&7), "-------".to_string());        
-        assert_eq!(lb(&12), "------------".to_string());        
+        assert_eq!(dashes(&5), "-----".to_string());        
+        assert_eq!(dashes(&2), "--".to_string());        
+        assert_eq!(dashes(&17), "-----------------".to_string());        
+        assert_eq!(dashes(&7), "-------".to_string());        
+        assert_eq!(dashes(&12), "------------".to_string());        
     }
 
     #[test]

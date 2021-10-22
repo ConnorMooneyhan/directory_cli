@@ -35,7 +35,8 @@ fn main() {
     // Selects command function to run based on 'command'
     match command {
         "add" | "a" | "edit" | "e" => contact::add(rest_args, &mut contacts, &directory_path),
-        "search" | "view" | "s" => contact::display_contacts(&contact::search(rest_args, &contacts)),
+        "search" | "s" => contact::display_contacts(&contact::search(rest_args, &contacts)),
+        "reverse-search" | "rs" => contact::display_contacts(&contact::reverse_search(rest_args, &contacts)),
         "delete" | "d" | "del" => contact::delete(rest_args, &mut contacts, &directory_path),
         "help" => contact::print_docs(),
         _ => {
