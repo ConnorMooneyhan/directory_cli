@@ -65,7 +65,7 @@ impl fmt::Display for Contact {
 }
 
 // Adds new contact to directory
-pub fn add(args: &[String], contacts: &mut HashMap<String, Contact>, path: &path::PathBuf) {
+pub fn add(args: &[String], contacts: &mut HashMap<String, Contact>, path: &path::PathBuf, command: &str) {
     exit_if_empty(args);
     
     // Creates new contact
@@ -113,11 +113,20 @@ pub fn add(args: &[String], contacts: &mut HashMap<String, Contact>, path: &path
         }
     }
 
-    let spacing = spaces(new_length / 2 - match new_length % 2 {1 => 2, 0 => 3, _ => 0});
+    let (message, extra_spacing) = match command {
+        "add" | "a" => ("Added", 0),
+        "edit" | "e" => ("Updated", 1),
+        _ => ("", 0)
+    };
+
+    let general_buffer = new_length / 2 - match new_length % 2 {1 => 2, 0 => 3, _ => 0};
+    let spacing = spaces(general_buffer);
+    let msg_spacing = spaces(general_buffer - extra_spacing);
 
     println!(
-        "\n{}Added\n  {}|\n  {}|\n  {}V",
-        spacing,
+        "\n{}{}\n  {}|\n  {}|\n  {}V",
+        msg_spacing,
+        message,
         spacing,
         spacing,
         spacing
