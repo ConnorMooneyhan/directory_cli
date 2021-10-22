@@ -1,2 +1,2 @@
 # directory_cli
-This is a simple CLI designed to create and manage a phone directory on the user's local file system.
+This is a simple CLI designed to create and manage a phone directory on the user's local file system. It will create/read a 'directory.json' file in the same folder as the executable, read it to a HashMap, and allow the user to perform CRUD (Create, Read, Update, Delete)

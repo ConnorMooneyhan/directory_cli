@@ -1,6 +1,7 @@
 use std::{cmp, collections::HashMap, fmt, fs, path, process};
 use serde::{ Serialize, Deserialize };
 use serde_json;
+use colored::*;
 
 // Every command that accesses a contact should use this struct
 // Defines Contact struct
@@ -220,14 +221,16 @@ pub fn display_contacts(contacts_vec: &Vec<Contact>) {
 
 pub fn print_docs() {
     let indentation = spaces("contact ".len());
-    println!("\n----------------------------------------------------------------");
-    println!("DOCUMENTATION\n");
-    println!("Available commands:");
-    println!("contact ______");
-    println!("{}search [name/number (can be partial)]", indentation);
-    println!("{}add [first name] [last name] [phone number w/ no spaces]", indentation);
-    println!("{}delete [name]", indentation);
-    println!("----------------------------------------------------------------\n");
+    println!("\n{}", "----------------------------------------------------------------");
+    println!("{}\n", "DOCUMENTATION");
+    println!("{}", "Available commands:");
+    println!("{} {}", "contact", "______");
+    println!("{}{} [name (can be partial)]", indentation, "search");
+    println!("{}{} [number (can be partial)]", indentation, "reverse-search");
+    println!("{}{} [first name] [last name] [phone number w/ no spaces]", indentation, "add");
+    println!("{}{} [first name] [last name] [phone number w/ no spaces]", indentation, "edit");
+    println!("{}{} [name/part of name]", indentation, "delete");
+    println!("{}\n", "----------------------------------------------------------------");
 }    
 
 // UTILITY FUNCTION
