@@ -38,7 +38,7 @@ fn main() {
         "search" | "s" => contact::display_contacts(&contact::search(rest_args, &contacts)),
         "reverse-search" | "rs" => contact::display_contacts(&contact::reverse_search(rest_args, &contacts)),
         "delete" | "d" | "del" => contact::delete(rest_args, &mut contacts, &directory_path),
-        "help" => contact::print_docs(),
+        "help" | "h" => contact::print_docs(),
         _ => {
             println!("'{}' is not a valid command.", command);
             contact::print_docs();
