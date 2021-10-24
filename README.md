@@ -9,5 +9,5 @@ This is a simple CLI designed to create and manage a phone directory on the user
 * delete [name/part of name]
 * help (shows available commands)
 
-Initials of commands are valid as shortcuts<br>
+Initials of commands are valid as shortcuts:<br>
 e.g. 'add' => 'a' and 'reverse-search' => 'rs'
