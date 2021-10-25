@@ -126,7 +126,7 @@ pub fn add(args: &[String], contacts: &mut HashMap<String, Contact>, path: &path
     println!(
         "\n{}{}\n  {}|\n  {}|\n  {}V",
         msg_spacing,
-        message,
+        message.bright_green(),
         spacing,
         spacing,
         spacing
