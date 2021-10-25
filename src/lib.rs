@@ -130,7 +130,7 @@ pub fn add(args: &[String], contacts: &mut HashMap<String, Contact>, path: &path
         spacing,
         spacing,
         spacing
-        );
+    );
     display_contacts(&vec![Contact::new(
         new_first,
         new_last,
@@ -218,8 +218,23 @@ pub fn delete(args: &[String], contacts: &mut HashMap<String, Contact>, path: &p
                     process::exit(1);
                 }    
             }    
+
+            let display_length = vec_max_length(&matches);
+            let message = "Deleted";
+            let extra_spacing = 1;
+
+            let general_buffer = display_length / 2 - match display_length % 2 {1 => 2, 0 => 3, _ => 0};
+            let spacing = spaces(general_buffer);
+            let msg_spacing = spaces(general_buffer - extra_spacing);
             
-            println!("The following contact has been deleted:");
+            println!(
+                "\n{}{}\n  {}|\n  {}|\n  {}V",
+                msg_spacing,
+                message.red(),
+                spacing,
+                spacing,
+                spacing
+                );
             display_contacts(&matches);
         },    
         0 => {
