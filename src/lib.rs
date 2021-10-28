@@ -121,7 +121,7 @@ pub fn add(args: &[String], contacts: &mut HashMap<String, Contact>, path: &path
     match write_result {
         Ok(_) => (),
         Err(_) => {
-            eprintln!("Unable to add contact :(");
+            eprintln!("{}", "Unable to add contact :(".red());
             process::exit(1);
         }
     }
@@ -161,7 +161,7 @@ pub fn search(args: &[String], contacts: &HashMap<String, Contact>) -> Vec<Conta
         1 => args[0].clone(),
         2 => format!("{} {}", args[0], args[1]),
         _ => {
-            eprintln!("Please enter a name or part of a name to search.");
+            eprintln!("{}", "Please enter a name or part of a name to search.".red());
             process::exit(1);
         }    
     };    
@@ -191,7 +191,7 @@ pub fn reverse_search(args: &[String], contacts: &HashMap<String, Contact>) -> V
     let search_term = match args.len() {
         1 => args[0].clone(),
         _ => {
-            eprintln!("Please enter a number or part of a number to reverse search.");
+            eprintln!("{}", "Please enter a number or part of a number to reverse search.".red());
             process::exit(1);
         }    
     };    
@@ -227,7 +227,7 @@ pub fn delete(args: &[String], contacts: &mut HashMap<String, Contact>, path: &p
             match write_result {
                 Ok(_) => (),
                 Err(_) => {
-                    eprintln!("Unable to delete contact :(");
+                    eprintln!("{}", "Unable to delete contact :(".red());
                     process::exit(1);
                 }    
             }    
@@ -251,12 +251,12 @@ pub fn delete(args: &[String], contacts: &mut HashMap<String, Contact>, path: &p
             display_contacts(&matches);
         },    
         0 => {
-            println!("No contacts found with that name.");
+            println!("{}", "No contacts found with that name.".red());
         },    
         _ => {
-            println!("There are multiple contacts that match that query:\n");
+            println!("{}", "There are multiple contacts that match that query:\n".yellow());
             display_contacts(&matches);
-            println!("\nPlease retry with the full name of the contact you wish to delete.");
+            println!("{}", "\nPlease retry with the full name of the contact you wish to delete.".yellow());
         }    
     }    
 }
@@ -264,7 +264,7 @@ pub fn delete(args: &[String], contacts: &mut HashMap<String, Contact>, path: &p
 // Exits process if no args supplied
 fn exit_if_empty(args: &[String]) {
     if args.len() == 0 {
-        println!("Oops! Remember to enter your argument(s) after the command.");
+        println!("{}", "Oops! Remember to enter your argument(s) after the command.".red());
         process::exit(1);
     }
 }
@@ -282,7 +282,7 @@ pub fn display_contacts(contacts_vec: &Vec<Contact>) {
             );    
         }    
     } else {
-        println!("No matches found.");
+        println!("{}", "No matches found.".red());
     }    
 }    
 
