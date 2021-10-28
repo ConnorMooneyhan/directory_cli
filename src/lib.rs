@@ -67,6 +67,7 @@ impl fmt::Display for Contact {
 // Adds new contact to directory
 pub fn add(args: &[String], contacts: &mut HashMap<String, Contact>, path: &path::PathBuf, command: &str) {
     exit_if_empty(args);
+
     
     // Creates new contact
     let new_contact =  match args.len() {
@@ -93,9 +94,21 @@ pub fn add(args: &[String], contacts: &mut HashMap<String, Contact>, path: &path
     let new_last = new_contact.last.clone();
     let new_number = new_contact.number.clone();
 
+    let full_name = format!("{} {}", new_first, new_last);
+
+    if command == "e" || command == "edit" {
+        match contacts.get(&full_name) {
+            None => {
+                println!("{}", format!("No contact with the name \"{}\" was found.", full_name).red());
+                return;
+            }
+            _ => ()
+        }
+    }
+
     // Adds contact to contacts
     contacts.insert(
-        format!("{} {}", new_first, new_last),
+        full_name,
         new_contact
     );
 
